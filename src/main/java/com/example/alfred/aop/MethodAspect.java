@@ -10,44 +10,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import com.example.alfred.common.Properties;
-import com.example.alfred.logger.EventLogger;
-import com.example.alfred.logger.ExceptionLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Aspect
 @Configuration
 public class MethodAspect {
 
-	@Autowired
-	Properties prop;
+	@Autowired Properties prop;
+	final String s="execution(* *..*"+"demo"+"*.*(..))";
 
-	@Around("execution(* *..*Interface*.*(..)) || execution(* *..*Controller*.*(..))")
+	@Around("execution(* *..*Interface*.*(..)) || execution(* *..*Controller*.*(..)) || execution(* *..*Util*.*(..))")
 	public Object aroundInterfaces(ProceedingJoinPoint point) throws Throwable {
 		ObjectMapper ow = new ObjectMapper();
+		System.out.println("to print getEvent");
+		System.out.println("----------------"+prop.getEvent()+"---------------------");
 		Map<String, Object> message = new HashMap<>();
 		message.put("event", "Start");
 		message.put("method", point.getSignature().toString());
 		message.put("args", point.getArgs());
-		if (prop.getEvent()) {
-			new EventLogger().debug(ow.writeValueAsString(message));
-		}
-		if (prop.getException()) {
-			new ExceptionLogger().debug(ow.writeValueAsString(message));
-		}
+		System.out.println(ow.writeValueAsString(message));
+		System.out.println();
+
 		Object result = point.proceed();
 
 		message = new HashMap<>();
 		message.put("event", "Response");
 		message.put("method", point.getSignature().toString());
 		message.put("response", result);
-		if (prop.getEvent()) {
-			new EventLogger().debug(ow.writeValueAsString(message));
-		}
-		if (prop.getException()) {
-			new ExceptionLogger().debug(ow.writeValueAsString(message));
-		}
-
+		System.out.println(ow.writeValueAsString(message));
+		System.out.println();
+		
 		return result;
 	}
-
+	
+	
+	@Around(s)
+	public Object test(ProceedingJoinPoint point) throws Throwable {
+		System.out.println("in");
+		Object result = point.proceed();
+		
+		return result;
+	}
 }

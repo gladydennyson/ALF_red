@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="DEBUG">
+<Configuration>
     <Appenders>
-        <Console name="LogToConsole" target="SYSTEM_OUT">
+        <Console name="Console">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
-        <File name="LogToFile" fileName="logs/alfredLogs.log">
-            <PatternLayout>
-                <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
-            </PatternLayout>
+
+        <File name = "eventFile" fileName = "logs/event.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+
+        <File name = "healthFile" fileName = "logs/health.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+
+        <File name = "exceptionFile" fileName = "logs/exception.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+
+        <File name = "rootFile" fileName = "logs/root.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
     </Appenders>
     <Loggers>
-        <Logger name="eventLog" level="debug">
-            <AppenderRef ref="LogToConsole"/>
-            <AppenderRef ref="LogToFile"/>
-        </Logger>
-        <Logger name="healthLog" level="info">
-            <AppenderRef ref="LogToConsole"/>
-            <AppenderRef ref="LogToFile"/>
-        </Logger>
-        <Logger name="exceptionLog" level="error">
-            <AppenderRef ref="LogToConsole"/>
-            <AppenderRef ref="LogToFile"/>
-        </Logger>
-        <Root level="info">
-            <AppenderRef ref="LogToFile"/>
-            <AppenderRef ref="LogToConsole"/>
+        <Root level="debug">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="rootFile"/>
         </Root>
+
+        <Logger name ="eventLog" level = "debug" additivity="false">
+            <AppenderRef ref = "eventFile" level = "debug"/>
+        </Logger>
+
+        <Logger name ="healthLog" level = "info" additivity="false">
+            <AppenderRef ref = "healthFile" level = "debug"/>
+        </Logger>
+        <Logger name ="exceptionLog" level = "error" additivity="false">
+            <AppenderRef ref = "exceptionFile" level = "debug"/>
+        </Logger>
+
+
     </Loggers>
 </Configuration>

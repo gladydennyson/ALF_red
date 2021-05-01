@@ -13,8 +13,10 @@ public class HealthLogger{
 
     private Logger logger;
 
-    public HealthLogger(String className){
+    public HealthLogger(){
+
         this.logger = LogManager.getLogger("healthLog");
+        System.out.println("-------"+this.logger);
     }
 
     public void debug(String message) {

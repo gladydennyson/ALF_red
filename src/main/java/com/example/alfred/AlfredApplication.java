@@ -1,6 +1,7 @@
 package com.example.alfred;
 
 import com.example.alfred.logger.EventLogger;
+import com.example.alfred.logger.HealthLogger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -8,11 +9,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AlfredApplication {
 
 	//test
-	private static EventLogger logger = new EventLogger();
+	private static HealthLogger logger = new HealthLogger();
 
 	public static void main(String[] args) {
 		System.out.println("Hello!");
-		logger.debug("test event log");
+		logger.info("health log");
 		SpringApplication.run(AlfredApplication.class, args);
 	}
 

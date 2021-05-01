@@ -6,6 +6,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -39,10 +40,31 @@ public class ExceptionHandlerControllerAdvice {
 		if (prop.getException()) {
 			new ExceptionLogger().error(ex);
 		} else {
+			
+			String url = "http://localhost:7002/v1/user/akshay/data/submit";
+			String requestJson = "{\"name\":\"akshay\"}";
 			HttpHeaders headers = new HttpHeaders();
-			headers.set("exception", "true");
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.set("header", "123");
 
-			HttpEntity<HttpHeaders> entity = new HttpEntity<>(headers);
+			HttpEntity<String> entity = new HttpEntity<String>(requestJson,headers);
+			String answer = rest.postForObject(url, entity, String.class);
+			System.out.println(answer);
+			
+//			HttpHeaders headers = new HttpHeaders();
+//			headers.set("exception", "true");
+//			headers.setContentType(MediaType.APPLICATION_JSON);
+//			HttpEntity<HttpHeaders> entity = new HttpEntity<>(headers);
+	//
+//			Map<String, Object> temp = new HashMap<String, Object>();
+//			temp.put("name", "akshay");
+//			rest.exchange("http://localhost:7002/v1/user/akshay/data/submit", HttpMethod.POST, entity, String.class, new HttpEntity<Map<String,Object>>(temp));
+			
+			headers = new HttpHeaders();
+			headers.set("exception", "true");
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+			entity = new HttpEntity<>(headers);
 
 			rest.exchange(prop.getURL(), HttpMethod.GET, entity, String.class);
 		}

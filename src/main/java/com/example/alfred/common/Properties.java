@@ -19,7 +19,7 @@ public class Properties {
 	}
 
 	public Boolean getException() {
-		return ThreadContext.get("exception").matches("true");
+		return ThreadContext.get("exception")!=null?ThreadContext.get("exception").matches("true"):false;
 	}
 
 	public String getURL() {

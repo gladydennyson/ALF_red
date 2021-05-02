@@ -9,8 +9,14 @@ import org.apache.logging.log4j.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
 
+/**
+ * Abstract factory class to log on various levels based on the type of logger
+ * EventLogger, ExceptionLogger and HealthLogger
+ *
+ */
 public abstract class LoggerFactory {
 
+	// logger variable to log the data
 	protected Logger logger;
 
 	public LoggerFactory getLogger(String loggerName) {

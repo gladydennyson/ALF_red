@@ -22,7 +22,7 @@
         </File>
     </Appenders>
     <Loggers>
-        <Root level="debug">
+        <Root level="info">
             <AppenderRef ref="Console"/>
         </Root>
 
@@ -33,7 +33,7 @@
         <Logger name ="healthLog" level = "info" additivity="false">
             <AppenderRef ref = "healthFile" level = "debug"/>
         </Logger>
-        <Logger name ="exceptionLog" level = "error" additivity="false">
+        <Logger name ="exceptionLog" level = "debug" additivity="false">
             <AppenderRef ref = "exceptionFile" level = "debug"/>
         </Logger>
 

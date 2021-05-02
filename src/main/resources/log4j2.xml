@@ -23,7 +23,7 @@
     </Appenders>
     <Loggers>
         <Root level="debug">
-            <AppenderRef ref="rootFile"/>
+            <AppenderRef ref="Console"/>
         </Root>
 
         <Logger name ="eventLog" level = "debug" additivity="false">

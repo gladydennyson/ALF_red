@@ -44,9 +44,13 @@
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.dropwizard.metrics</groupId>
-			<artifactId>metrics-core</artifactId>
-		</dependency>
+    <groupId>io.dropwizard.metrics</groupId>
+    <artifactId>metrics-core</artifactId>
+</dependency>
+		<dependency>
+    <groupId>io.dropwizard.metrics</groupId>
+    <artifactId>metrics-healthchecks</artifactId>
+</dependency>
 
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -55,6 +59,7 @@
 		</dependency>
 
 	</dependencies>
+	
 
 
 	<build>

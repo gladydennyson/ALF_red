@@ -21,48 +21,97 @@ import com.example.alfred.common.Properties;
 import com.example.alfred.logger.ExceptionLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Exception handler using Aspect oriented programming to handle and enable
+ * exceptions
+ *
+ */
 @EnableWebMvc
 @ControllerAdvice
 public class ExceptionAdvice {
 
+	/**
+	 * Catches all the exceptions thrown by the controllers
+	 * 
+	 * Handles internal exceptions with a response of (HTTP 500) and custom
+	 * exceptions with the code specified using the @ResponseStatus()
+	 * 
+	 * if the exception flag is enabled, logs the exception or Calls the
+	 * resendRequest() method
+	 * 
+	 * @param ex
+	 * @param request
+	 * @return Response Entity with the exception message and the HttpStatus
+	 */
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
 	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
+
+		// default Http response status
 		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+		// checks the response status set by @ResponseStatus()
 		ResponseStatus annotation = AnnotatedElementUtils.findMergedAnnotation(ex.getClass(), ResponseStatus.class);
 		if (annotation != null) {
 			status = annotation.value() != null ? annotation.value() : annotation.code();
 		}
 
+		// logs the exception if the exception flag is enabled
 		Properties prop = new Properties();
 		if (prop.getException()) {
 			new ExceptionLogger().error(ex);
 		} else {
-			String url = "http://localhost:" + prop.getPort() + prop.getURL();
-			String body = prop.getRequestBody();
-			HttpHeaders headers = new HttpHeaders();
-			try {
-				@SuppressWarnings("unchecked")
-				Map<String, String> headerMap = new ObjectMapper().readValue(prop.getRequestHeaders(), Map.class);
-				for (Entry<String, String> k : headerMap.entrySet()) {
-					headers.set(k.getKey(), k.getValue());
-				}
-				headers.set("exception", "true");
-				RestTemplate rest = new RestTemplate();
-				if (prop.getMethodType().equals("post")) {
-					HttpEntity<String> entity = new HttpEntity<String>(body, headers);
-					rest.postForObject(url, entity, Object.class);
-				} else if (prop.getMethodType().equals("put")) {
-					HttpEntity<String> entity = new HttpEntity<String>(body, headers);
-					rest.put(url, entity);
-				} else if (prop.getMethodType().equals("get")) {
-					HttpEntity<String> entity = new HttpEntity<String>(headers);
-					rest.exchange(url, HttpMethod.GET, entity, Object.class);
-				}
-			} catch (Exception e) {
-				
-			}
+			// calls the same URL again with the exception flag set
+			resendRequest(ex, prop);
 		}
+
+		// returns a Response Entity with the exception message and the HttpStatus
 		return new ResponseEntity<Object>(ex.getMessage(), status);
+	}
+
+	/**
+	 * Calls the same URL that encountered the exception enabling the exception flag
+	 * 
+	 * @param ex
+	 */
+	private void resendRequest(Exception ex, Properties prop) {
+
+		// generates the URL
+		String url = "http://localhost:" + prop.getPort() + prop.getURL();
+
+		// gets the request body from the thread context
+		String body = prop.getRequestBody();
+		try {
+
+			// gets the headers of the current request from the thread context
+			HttpHeaders headers = new HttpHeaders();
+			@SuppressWarnings("unchecked")
+			Map<String, String> headerMap = new ObjectMapper().readValue(prop.getRequestHeaders(), Map.class);
+			for (Entry<String, String> k : headerMap.entrySet()) {
+				headers.set(k.getKey(), k.getValue());
+			}
+			// adds the exception header to the headers
+			headers.set("exception", "true");
+
+			// rest template to call the urls
+			RestTemplate rest = new RestTemplate();
+
+			// calling post urls
+			if (prop.getMethodType().equals("post")) {
+				rest.postForObject(url, new HttpEntity<String>(body, headers), Object.class);
+			}
+			// calling put urls
+			else if (prop.getMethodType().equals("put")) {
+				rest.put(url, new HttpEntity<String>(body, headers));
+			}
+			// calling get urls
+			else if (prop.getMethodType().equals("get")) {
+				HttpEntity<String> entity = new HttpEntity<String>(headers);
+				rest.exchange(url, HttpMethod.GET, entity, Object.class);
+			}
+		} catch (Exception e) {
+			// catches the exception thrown by the rest calls
+			new ExceptionLogger().error(e);
+		}
 	}
 }

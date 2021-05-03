@@ -22,48 +22,73 @@ import org.springframework.stereotype.Component;
 import com.example.alfred.healthcheck.AlfredhealthCheckCalling;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Filter to intercepts all the http requests
+ *
+ */
 @Configuration
 @Component
 public class AlfredFilter implements Filter {
+
+	/**
+	 * auto-generated
+	 */
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 
 	}
 
-	// health
+	/**
+	 * Adds the data to be used by the application to the thread context.
+	 *
+	 */
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
     	new AlfredhealthCheckCalling().check();
 		HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
 		HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-		
+
+		// generates a unique id for each request using the timestamp and stores it into
+		// the thread context
 		ThreadContext.put("req.id", UuidUtil.getTimeBasedUuid().toString());
 
+		// gets the server port and stores it into the thread context
 		ThreadContext.put("req.port", httpServletRequest.getServerPort() + "");
 
+		// gets the request url and stores it into the thread context
 		ThreadContext.put("req.url", httpServletRequest.getRequestURI()
 				+ (httpServletRequest.getQueryString() == null ? "" : ("?" + httpServletRequest.getQueryString())));
 
+		// gets the request method type and stores it into the thread context
 		ThreadContext.put("req.method", httpServletRequest.getMethod());
 
-		Map<String, String> headers = Collections.list(httpServletRequest.getHeaderNames())
-			    .parallelStream()
-			    .collect(Collectors.toMap(h -> h, httpServletRequest::getHeader));
+		// gets the request headers and stores it into the thread context
+		Map<String, String> headers = Collections.list(httpServletRequest.getHeaderNames()).parallelStream()
+				.collect(Collectors.toMap(h -> h, httpServletRequest::getHeader));
 		ThreadContext.put("req.headers", new ObjectMapper().writeValueAsString(headers));
+
+		// gets the exceptions flag from the headers and stores it into the thread
+		// context
 		ThreadContext.put("req.exception", headers.getOrDefault("exception", "false"));
 
-		CustomRequestBody wrappedRequest=new CustomRequestBody(httpServletRequest);
-		String requestBody = new String(wrappedRequest.getBody());        
+		// gets the request body and stores it into the thread context
+		CustomRequestBody wrappedRequest = new CustomRequestBody(httpServletRequest);
+		String requestBody = new String(wrappedRequest.getBody());
 		ThreadContext.put("req.requestBody", requestBody);
-		
+
 		try {
+			// moves to the controller
 			filterChain.doFilter(wrappedRequest, httpServletResponse);
 		} finally {
+			// clear the thread context
 			ThreadContext.clearAll();
 		}
 	}
 
+	/**
+	 * auto-generated
+	 */
 	@Override
 	public void destroy() {
 

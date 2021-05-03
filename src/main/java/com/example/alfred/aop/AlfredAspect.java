@@ -38,10 +38,10 @@ public class AlfredAspect {
 	@Around("execution(* *..*Interface*.*(..)) || execution(* *..*Controller*.*(..))")
 	public Object around(ProceedingJoinPoint point) throws Throwable {
 		
-		//logs the data using event and the exception logger based on the flags
+		// logs the data using event and the exception logger based on the flags
 		if (prop.getEvent() || prop.getException()) {
 			
-			// 
+			// Adds request id, start event, method name, method arguments
 			ObjectMapper ow = new ObjectMapper();
 			Map<String, Object> message = new HashMap<>();
 			message.put("requestid", prop.getRequestID());
@@ -57,17 +57,21 @@ public class AlfredAspect {
 			}
 		}
 		
-		//proceed to the method
+		// proceed to the method
 		Object result = point.proceed();
+		// returns from the method 
 
-		
+		// logs the data using event and the exception logger based on the flags
 		if (prop.getEvent() || prop.getException()) {
+			
+			// Adds request id, response event, method name, method response
 			ObjectMapper ow = new ObjectMapper();
 			Map<String, Object> message = new HashMap<>();
 			message.put("requestid", prop.getRequestID());
 			message.put("event", "Response");
 			message.put("method", point.getSignature().toString());
 			message.put("response", result);
+			
 			if(prop.getEvent()) {
 				new EventLogger().debug(ow.writeValueAsString(message));
 			}

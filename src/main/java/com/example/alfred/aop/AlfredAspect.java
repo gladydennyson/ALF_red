@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import com.example.alfred.common.Properties;
-import com.example.alfred.logger.EventLogger;
-import com.example.alfred.logger.ExceptionLogger;
+import com.example.alfred.logger.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -50,10 +49,10 @@ public class AlfredAspect {
 			message.put("args", point.getArgs());
 			
 			if(prop.getEvent()) {
-				new EventLogger().debug(ow.writeValueAsString(message));
+				new LoggerFactory().getLogger("event").debug(ow.writeValueAsString(message));
 			}
 			if(prop.getException()) {
-				new ExceptionLogger().debug(ow.writeValueAsString(message));
+				new LoggerFactory().getLogger("exception").debug(ow.writeValueAsString(message));
 			}
 		}
 		
@@ -73,10 +72,10 @@ public class AlfredAspect {
 			message.put("response", result);
 			
 			if(prop.getEvent()) {
-				new EventLogger().debug(ow.writeValueAsString(message));
+				new LoggerFactory().getLogger("event").debug(ow.writeValueAsString(message));
 			}
 			if(prop.getException()) {
-				new ExceptionLogger().debug(ow.writeValueAsString(message));
+				new LoggerFactory().getLogger("exception").debug(ow.writeValueAsString(message));
 			}
 		}
 

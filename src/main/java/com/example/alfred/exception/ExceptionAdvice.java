@@ -18,7 +18,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.example.alfred.common.Properties;
-import com.example.alfred.logger.ExceptionLogger;
+import com.example.alfred.logger.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -59,7 +59,7 @@ public class ExceptionAdvice {
 		// logs the exception if the exception flag is enabled
 		Properties prop = new Properties();
 		if (prop.getException()) {
-			new ExceptionLogger().error(ex);
+			new LoggerFactory().getLogger("exception").error(ex);
 		} else {
 			// calls the same URL again with the exception flag set
 			resendRequest(ex, prop);
@@ -93,25 +93,31 @@ public class ExceptionAdvice {
 			// adds the exception header to the headers
 			headers.set("exception", "true");
 
-			// rest template to call the urls
-			RestTemplate rest = new RestTemplate();
+			// calls the url
+			callURL(prop.getMethodType(), url, headers, body);
 
-			// calling post urls
-			if (prop.getMethodType().equals("post")) {
-				rest.postForObject(url, new HttpEntity<String>(body, headers), Object.class);
-			}
-			// calling put urls
-			else if (prop.getMethodType().equals("put")) {
-				rest.put(url, new HttpEntity<String>(body, headers));
-			}
-			// calling get urls
-			else if (prop.getMethodType().equals("get")) {
-				HttpEntity<String> entity = new HttpEntity<String>(headers);
-				rest.exchange(url, HttpMethod.GET, entity, Object.class);
-			}
 		} catch (Exception e) {
 			// catches the exception thrown by the rest calls
-			new ExceptionLogger().error(e);
+			new LoggerFactory().getLogger("exception").error(e);
+		}
+	}
+
+	public void callURL(String methodType, String url, HttpHeaders headers, String body) {
+		// rest template to call the urls
+		RestTemplate rest = new RestTemplate();
+
+		// calling post urls
+		if (methodType.equals("post")) {
+			rest.postForObject(url, new HttpEntity<String>(body, headers), Object.class);
+		}
+		// calling put urls
+		else if (methodType.equals("put")) {
+			rest.put(url, new HttpEntity<String>(body, headers));
+		}
+		// calling get urls
+		else if (methodType.equals("get")) {
+			HttpEntity<String> entity = new HttpEntity<String>(headers);
+			rest.exchange(url, HttpMethod.GET, entity, Object.class);
 		}
 	}
 }

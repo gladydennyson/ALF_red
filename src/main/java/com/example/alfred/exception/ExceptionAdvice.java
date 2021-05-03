@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -97,27 +98,35 @@ public class ExceptionAdvice {
 			callURL(prop.getMethodType(), url, headers, body);
 
 		} catch (Exception e) {
-			// catches the exception thrown by the rest calls
+			// catches the exception for the object mapper
 			new LoggerFactory().getLogger("exception").error(e);
 		}
 	}
 
+	@Async
 	public void callURL(String methodType, String url, HttpHeaders headers, String body) {
-		// rest template to call the urls
-		RestTemplate rest = new RestTemplate();
 
-		// calling post urls
-		if (methodType.equals("post")) {
-			rest.postForObject(url, new HttpEntity<String>(body, headers), Object.class);
+		try {
+			// rest template to call the urls
+			RestTemplate rest = new RestTemplate();
+
+			// calling post urls
+			if (methodType.equals("post")) {
+				rest.postForObject(url, new HttpEntity<String>(body, headers), Object.class);
+			}
+			// calling put urls
+			else if (methodType.equals("put")) {
+				rest.put(url, new HttpEntity<String>(body, headers));
+			}
+			// calling get urls
+			else if (methodType.equals("get")) {
+				HttpEntity<String> entity = new HttpEntity<String>(headers);
+				rest.exchange(url, HttpMethod.GET, entity, Object.class);
+			}
+		} catch (Exception e) {
+			// catches the redundant exception thrown by the rest calls
+			// indicated the success of exception logging
 		}
-		// calling put urls
-		else if (methodType.equals("put")) {
-			rest.put(url, new HttpEntity<String>(body, headers));
-		}
-		// calling get urls
-		else if (methodType.equals("get")) {
-			HttpEntity<String> entity = new HttpEntity<String>(headers);
-			rest.exchange(url, HttpMethod.GET, entity, Object.class);
-		}
+
 	}
 }

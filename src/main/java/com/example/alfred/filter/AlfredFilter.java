@@ -16,9 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.core.util.UuidUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
+import com.example.alfred.common.Properties;
+import com.example.alfred.healthcheck.AlfredHealthChecker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -29,6 +32,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class AlfredFilter implements Filter {
 
+	@Autowired
+	Properties prop;
 	/**
 	 * auto-generated
 	 */
@@ -44,7 +49,7 @@ public class AlfredFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
 			throws IOException, ServletException {
-		
+
 		HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
 		HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
 
@@ -80,6 +85,9 @@ public class AlfredFilter implements Filter {
 			// moves to the controller
 			filterChain.doFilter(wrappedRequest, httpServletResponse);
 		} finally {
+			if(prop.getHealth())
+				new AlfredHealthChecker();
+			
 			// clear the thread context
 			ThreadContext.clearAll();
 		}

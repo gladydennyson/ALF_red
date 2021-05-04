@@ -23,4 +23,5 @@ public class AlfredHealthCheckIntegrationTest {
         assertFalse(results.isEmpty());
         results.forEach((k, v) -> assertTrue(v.isHealthy()));
     }
+	
 }

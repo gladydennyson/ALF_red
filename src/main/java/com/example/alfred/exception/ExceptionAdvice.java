@@ -125,7 +125,7 @@ public class ExceptionAdvice {
 			}
 		} catch (Exception e) {
 			// catches the redundant exception thrown by the rest calls
-			// indicated the success of exception logging
+			// indicates the success of exception logging
 		}
 
 	}

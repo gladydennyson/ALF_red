@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
+import com.example.alfred.common.Properties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Throwables;
 
@@ -34,12 +35,14 @@ public class AlfredLogger {
 			message.put("event", exception.getClass());
 			message.put("message", exception.getMessage());
 			message.put("stack", Throwables.getStackTraceAsString(exception));
+			message.put("requestid", new Properties().getRequestID());
 			logger.log(Level.ERROR, ow.writeValueAsString(message));
 		} catch (Exception e) {
 			// in case the object mapper fails
 			logger.log(Level.ERROR,
 					"{\"event\":\"" + exception.getClass() + "\", \"message\":\"" + exception.getMessage()
-							+ "\", \"trace\":\"" + Throwables.getStackTraceAsString(exception) + "\"}");
+							+ "\", \"requestid\":\"" + new Properties().getRequestID() + "\", \"trace\":\""
+							+ Throwables.getStackTraceAsString(exception) + "\"}");
 		}
 	}
 

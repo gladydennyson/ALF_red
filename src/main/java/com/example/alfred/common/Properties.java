@@ -58,6 +58,7 @@ public class Properties {
 	 */
 	public String getURL() {
 		return ThreadContext.get("req.url");
+		
 	}
 
 	/**

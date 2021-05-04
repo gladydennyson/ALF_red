@@ -103,6 +103,14 @@ public class ExceptionAdvice {
 		}
 	}
 
+	/**
+	 * calls the url based on the methodtype
+	 * 
+	 * @param methodType
+	 * @param url
+	 * @param headers
+	 * @param body
+	 */
 	@Async
 	public void callURL(String methodType, String url, HttpHeaders headers, String body) {
 
@@ -122,6 +130,11 @@ public class ExceptionAdvice {
 			else if (methodType.equals("get")) {
 				HttpEntity<String> entity = new HttpEntity<String>(headers);
 				rest.exchange(url, HttpMethod.GET, entity, Object.class);
+			}
+			// calling delete urls
+			else if (methodType.equals("delete")) {
+				HttpEntity<String> entity = new HttpEntity<String>(headers);
+				rest.exchange(url, HttpMethod.DELETE, entity, Object.class);
 			}
 		} catch (Exception e) {
 			// catches the redundant exception thrown by the rest calls

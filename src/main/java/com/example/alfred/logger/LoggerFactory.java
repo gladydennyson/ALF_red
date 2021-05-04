@@ -1,8 +1,8 @@
 package com.example.alfred.logger;
 
 /**
- * factory class to return the logger based on the type of logger
- * EventLogger, ExceptionLogger and HealthLogger
+ * factory class to return the logger based on the type of logger EventLogger,
+ * ExceptionLogger and HealthLogger
  *
  */
 public class LoggerFactory implements AbstractLoggerFactory<AlfredLogger> {

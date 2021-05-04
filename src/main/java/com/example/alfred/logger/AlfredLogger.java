@@ -30,19 +30,21 @@ public class AlfredLogger {
 
 		// adds the name message and stacktrace to the a map and writes it as a
 		// serealized json string
+		Properties prop = new Properties();
 		try {
 			Map<String, Object> message = new HashMap<>();
 			message.put("event", exception.getClass());
 			message.put("message", exception.getMessage());
 			message.put("stack", Throwables.getStackTraceAsString(exception));
-			message.put("requestid", new Properties().getRequestID());
+			message.put("requestid", prop.getRequestID());
+			message.put("url", prop.getURL());
 			logger.log(Level.ERROR, ow.writeValueAsString(message));
 		} catch (Exception e) {
 			// in case the object mapper fails
 			logger.log(Level.ERROR,
 					"{\"event\":\"" + exception.getClass() + "\", \"message\":\"" + exception.getMessage()
-							+ "\", \"requestid\":\"" + new Properties().getRequestID() + "\", \"trace\":\""
-							+ Throwables.getStackTraceAsString(exception) + "\"}");
+							+ "\", \"requestid\":\"" + prop.getRequestID() + "\", \"url\":\"" + prop.getURL()
+							+ "\", \"trace\":\"" + Throwables.getStackTraceAsString(exception) + "\"}");
 		}
 	}
 

@@ -28,7 +28,7 @@ public class AlfredAspect {
 	 * Executes around all the controllers and interfaces in the application context
 	 * following the Spring naming conventions.
 	 * 
-	 * if event logging is enables, logs the method name, method arguments, event
+	 * if event logging is enabled, logs the method name, method arguments, event
 	 * type, a unique id and the method response from the pointcut
 	 * 
 	 * if exception flag is enabled, logs the method name, method arguments, event

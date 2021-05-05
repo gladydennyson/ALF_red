@@ -1,0 +1,13 @@
+{"time" : "20:56:12.765", "message" : {"stack":"","requestid":null,"event":"org.mockito.codegen.Exception$MockitoMock$278801367","message":"unit test","url":null}
+{"time" : "21:08:19.574", "message" : {"stack":"","requestid":null,"event":"org.mockito.codegen.Exception$MockitoMock$1988490308","message":"unit test","url":null}
+{"time" : "15:31:36.831", "message" : {"stack":"","requestid":null,"event":"org.mockito.codegen.Exception$MockitoMock$2019854900","message":"unit test","url":null}
+{"time" : "15:34:10.807", "message" : {"stack":"","requestid":null,"event":"org.mockito.codegen.Exception$MockitoMock$728579680","message":"unit test","url":null}
+{"time" : "17:11:54.859", "message" : {"stack":"","requestid":null,"event":"org.mockito.codegen.Exception$MockitoMock$1345629876","message":"unit test","url":null}
+{"time" : "17:16:18.913", "message" : {"stack":"","requestid":null,"event":"org.mockito.codegen.Exception$MockitoMock$1383808120","message":"unit test","url":null}
+{"time" : "17:19:15.393", "message" : {"stack":"","requestid":null,"event":"org.mockito.codegen.Exception$MockitoMock$228320646","message":"unit test","url":null}
+{"time" : "17:20:54.067", "message" : {"stack":"","requestid":null,"event":"org.mockito.codegen.Exception$MockitoMock$1447960948","message":"unit test","url":null}
+{"time" : "17:27:07.429", "message" : {"stack":"","requestid":null,"event":"org.mockito.codegen.Exception$MockitoMock$+++++++++","message":"unit test","url":null}
+{"time" : "17:31:22.789", "message" : {"stack":"","requestid":null,"event":"org.mockito.codegen.Exception$MockitoMock$2064771156","message":"unit test","url":null}
+{"time" : "17:36:27.747", "message" : {"stack":"","requestid":null,"event":"org.mockito.codegen.Exception$MockitoMock$851755997","message":"unit test","url":null}
+{"time" : "17:53:40.207", "message" : {"stack":"","requestid":null,"event":"org.mockito.codegen.Exception$MockitoMock$1218100173","message":"unit test","url":null}
+{"time" : "18:00:01.373", "message" : {"stack":"","requestid":null,"event":"org.mockito.codegen.Exception$MockitoMock$1455048171","message":"unit test","url":null}

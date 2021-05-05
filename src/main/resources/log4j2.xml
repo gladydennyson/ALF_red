@@ -6,15 +6,15 @@
         </Console>
 
         <File name = "eventFile" fileName = "logs/event.log">
-            <PatternLayout pattern="{&quot;time&quot; : &quot;%d{HH:mm:ss.SSS}&quot;, &quot;message&quot; : %msg%n"/>
+            <PatternLayout pattern="{&quot;time&quot; : &quot;%d{HH:mm:ss.SSS}&quot;, &quot;message&quot; : %spi%n"/>
         </File>
 
         <File name = "healthFile" fileName = "logs/health.log">
-            <PatternLayout pattern="{&quot;time&quot; : &quot;%d{HH:mm:ss.SSS}&quot;, &quot;message&quot; : %msg%n"/>
+            <PatternLayout pattern="{&quot;time&quot; : &quot;%d{HH:mm:ss.SSS}&quot;, &quot;message&quot; : %spi%n"/>
         </File>
 
         <File name = "exceptionFile" fileName = "logs/exception.log">
-            <PatternLayout pattern="{&quot;time&quot; : &quot;%d{HH:mm:ss.SSS}&quot;, &quot;message&quot; : %msg%n"/>
+            <PatternLayout pattern="{&quot;time&quot; : &quot;%d{HH:mm:ss.SSS}&quot;, &quot;message&quot; : %spi%n"/>
         </File>
         
     </Appenders>

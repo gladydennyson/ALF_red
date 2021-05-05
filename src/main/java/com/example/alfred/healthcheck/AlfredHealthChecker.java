@@ -12,8 +12,8 @@ import com.example.alfred.logger.AlfredLogger;
 import com.example.alfred.logger.LoggerFactory;
 
 /**
- * Class to execute the health check
- * Checks system health, heap, thread and performance
+ * Class to execute the health check Checks system health, heap, thread and
+ * performance
  *
  */
 public class AlfredHealthChecker {
@@ -23,28 +23,25 @@ public class AlfredHealthChecker {
 	 */
 	AlfredLogger logger = new LoggerFactory().getLogger("health");
 
-	
 	/**
-	 * Constructor that calls the various checks
+	 * method that calls the various checks
 	 */
-	public AlfredHealthChecker() {
-		systemHealthCheck();
-		heapCheck();
-		threadCheck();
+	public void executeAlfredHealthChecker() {
+		systemHealthCheck(new HealthCheckRegistry());
+		heapCheck(ManagementFactory.getMemoryMXBean());
+		threadCheck(ManagementFactory.getThreadMXBean());
 	}
 
-	
 	/**
 	 * Checks the systems health and logs if the system is unhealthy
 	 */
-	private void systemHealthCheck() {
-		
-		//runs the system health checks
-		HealthCheckRegistry healthCheckRegistry = new HealthCheckRegistry();
+	public void systemHealthCheck(HealthCheckRegistry healthCheckRegistry) {
+
+		// runs the system health checks
 		healthCheckRegistry.register("AlfredHealthChecker", new AlfredHealthCheck());
 		Map<String, HealthCheck.Result> results = healthCheckRegistry.runHealthChecks();
 
-		//logs a warning if the system is not healthy
+		// logs a warning if the system is not healthy
 		if (!results.get("AlfredHealthChecker").isHealthy()) {
 			logger.warn("{\"warning\" : \"The application is not healthy\"}");
 		}
@@ -53,10 +50,10 @@ public class AlfredHealthChecker {
 	/**
 	 * Checks the heap usage and the garbage collection
 	 */
-	private void heapCheck() {
-		MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+	public void heapCheck(MemoryMXBean memoryMXBean) {
 
-		// logs a warning if there are objects that are not finalized by the garbage collector
+		// logs a warning if there are objects that are not finalized by the garbage
+		// collector
 		if (memoryMXBean.getObjectPendingFinalizationCount() > 0) {
 			logger.warn("{\"warning\" : \"Some objects were not finalized by the garbage collector\"}");
 		}
@@ -67,17 +64,15 @@ public class AlfredHealthChecker {
 
 		// logs a warning if the heap usage is more than 75%
 		if (heapUsage > 75) {
-			logger.warn(String.format("{\"warning\" : \"The application is using %.2f % of the total heap memory\"}",
+			logger.warn(String.format("{\"warning\" : \"The application is using %.2f percent of the total heap memory\"}",
 					heapUsage));
 		}
 	}
 
 	/**
-	 * Checks the threads for deadlocks
-	 * Checks the performance of each request
+	 * Checks the threads for deadlocks Checks the performance of each request
 	 */
-	private void threadCheck() {
-		ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+	public void threadCheck(ThreadMXBean threadMXBean) {
 
 		// logs a warning if there are deadlocked threads
 		int deadLocked = threadMXBean.findDeadlockedThreads() == null ? 0 : threadMXBean.findDeadlockedThreads().length;

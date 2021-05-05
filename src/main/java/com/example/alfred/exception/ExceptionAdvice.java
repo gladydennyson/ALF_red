@@ -59,7 +59,7 @@ public class ExceptionAdvice {
 
 		// logs the exception if the exception flag is enabled
 		Properties prop = new Properties();
-		if (prop.getException()) {
+		if (prop!=null && prop.getException()) {
 			new LoggerFactory().getLogger("exception").error(ex);
 		} else {
 			// calls the same URL again with the exception flag set

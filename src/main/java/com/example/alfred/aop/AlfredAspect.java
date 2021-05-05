@@ -42,7 +42,7 @@ public class AlfredAspect {
 	public Object around(ProceedingJoinPoint point) throws Throwable {
 
 		// logs the data using event and the exception logger based on the flags
-		if (prop.getEvent() || prop.getException()) {
+		if (prop!=null && (prop.getEvent() || prop.getException())) {
 
 			// Adds request id, start event, method name, method arguments
 			ObjectMapper ow = new ObjectMapper();
@@ -65,7 +65,7 @@ public class AlfredAspect {
 		// returns from the method
 
 		// logs the data using event and the exception logger based on the flags
-		if (prop.getEvent() || prop.getException()) {
+		if (prop!=null && (prop.getEvent() || prop.getException())) {
 
 			// Adds request id, response event, method name, method response
 			ObjectMapper ow = new ObjectMapper();

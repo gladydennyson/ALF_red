@@ -85,8 +85,8 @@ public class AlfredFilter implements Filter {
 			// moves to the controller
 			filterChain.doFilter(wrappedRequest, httpServletResponse);
 		} finally {
-			if(prop.getHealth())
-				new AlfredHealthChecker();
+			if(prop!=null && prop.getHealth())
+				new AlfredHealthChecker().executeAlfredHealthChecker();
 			
 			// clear the thread context
 			ThreadContext.clearAll();

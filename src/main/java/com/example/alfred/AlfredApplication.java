@@ -5,8 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 
+
 /**
  * Starter application
+ * 
+ * @authors Glady Dennyson Thomas, Jay Garg, Akshay Narula 
  *
  */
 @SpringBootApplication
